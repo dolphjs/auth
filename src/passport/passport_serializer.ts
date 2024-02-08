@@ -1,5 +1,5 @@
-import { IPayload } from '@dolphjs/dolph/common';
 import * as passport from 'passport';
+import { IPayload } from '../interfaces/dolph_interfaces';
 
 export abstract class PassportSerializer {
   abstract serializeUser(user: any, done: Function);
