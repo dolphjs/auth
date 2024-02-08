@@ -1,54 +1,26 @@
-import passport from 'passport';
-import { PassportStrategyType } from '../interfaces';
+import * as passport from 'passport';
 
-export function PassportStrategy<T extends PassportStrategyType<any> = any>(
-  Strategy: T,
-  name?: string | undefined,
-  callbackArity?: true | number,
-): {
-  new (...args): InstanceType<T>;
-} {
-  abstract class ExtendedStrategy extends Strategy {
-    abstract validate(...args: any[]): any;
-
-    constructor(...args: any[]) {
-      const callback = async (...params: any[]) => {
-        const done = params[params.length - 1];
-        try {
-          const validateResult = await this.validate(...params);
-          if (Array.isArray(validateResult)) {
-            done(null, ...validateResult);
-          } else {
-            done(null, validateResult);
-          }
-        } catch (err) {
-          done(err, null);
-        }
-      };
-
-      if (callbackArity !== undefined) {
-        const validate = new.target?.prototype?.validate;
-        const arity = callbackArity === true ? validate.length + 1 : callbackArity;
-        if (validate) {
-          Object.defineProperty(callback, 'length', {
-            value: arity,
-          });
-        }
-      }
-      super(...args, callback);
-
-      const passportInstance = this.getPassportInstance();
-      if (name) {
-        passportInstance.use(name, this as any);
-      } else {
-        passportInstance.use(this as any);
-      }
-    }
-
-    getPassportInstance() {
-      return passport;
-    }
+export class PassportStrategy {
+  Strategies: any[] = [];
+  constructor(Strategies: any[]) {
+    this.Strategies = Strategies;
   }
 
-  return ExtendedStrategy;
+  public initPassport() {
+    this.Strategies.forEach((Strategy) => {
+      this.getPassportInstance().use(Strategy);
+    });
+  }
+
+  public addStrategy(name: string, instance: any) {
+    this.getPassportInstance().use(name, instance);
+  }
+
+  public authenticate(strategy: string, options?: any) {
+    return this.getPassportInstance().authenticate(strategy, options);
+  }
+
+  getPassportInstance() {
+    return passport;
+  }
 }
