@@ -1,0 +1,74 @@
+{
+  "name": "@dolphjs/auth",
+  "version": "0.1.0",
+  "description": "dolphjs auth package",
+  "main": "index.js",
+  "repository": "https://github.com/dolphjs/auth",
+  "author": "Utibeabasi Ekong",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -b -v .",
+    "build:dev": "tsc -b -v . --watch",
+    "prebuild:prod": "npm run clean",
+    "clean": "npm run clean:all",
+    "clean:all": "tsc -b --clean classes common core decorators packages utilities",
+    "format": "prettier \"**/*.ts\" \"common/**/*.json\" --ignore-path ./.prettierignore --write && git status",
+    "copy:package-json": "gulp copy:package-json",
+    "copy:readme": "gulp copy:readme",
+    "copy:license": "gulp copy:license",
+    "copy:npm-ignore": "gulp copy:npm-ignore",
+    "copy:all": "npm run copy:package-json && npm run copy:readme && npm run copy:license && npm run copy:npm-ignore",
+    "pre:publish": "npm run build && npm run copy:all"
+  },
+  "lint-staged": {
+    "**/*.ts": [
+      "prettier --ignore-path ./.prettierignore --write"
+    ],
+    "core/**/*.json": [
+      "prettier --ignore-path ./.prettierignore --write"
+    ],
+    "common/**/*.json": [
+      "prettier --ignore-path ./.prettierignore --write"
+    ],
+    "classes/**/*.json": [
+      "prettier --ignore-path ./.prettierignore --write"
+    ],
+    "decorators/**/*.json": [
+      "prettier --ignore-path ./.prettierignore --write"
+    ],
+    "packages/**/*.json": [
+      "prettier --ignore-path ./.prettierignore --write"
+    ],
+    "utilities/**/*.json": [
+      "prettier --ignore-path ./.prettierignore --write"
+    ]
+  },
+  "engines": {
+    "node": ">= 18"
+  },
+  "peerDependencies": {
+    "@dolphjs/dolph": "^1.1.0",
+    "passport": "^0.4.0 || ^0.5.0 || ^0.6.0 || ^0.7.0"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.2",
+    "@types/moment": "^2.13.0",
+    "@types/node": "20.11.16",
+    "@types/passport": "1.0.16",
+    "@types/passport-jwt": "4.0.1",
+    "@types/passport-local": "1.0.38",
+    "@typescript-eslint/eslint-plugin": "6.21.0",
+    "@typescript-eslint/parser": "6.21.0",
+    "eslint": "8.56.0",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-plugin-import": "2.29.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.5"
+  },
+  "dependencies": {
+    "@dolphjs/dolph": "^1.1.1"
+  }
+}
